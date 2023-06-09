@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Player : MonoBehaviour
     public Boolean started = false;
 
     private float time = 0;
+
+    private float jumpCount = 2;
 
     void Update()
     {
@@ -36,6 +39,23 @@ public class Player : MonoBehaviour
             started = true;
         }
 
-        playerRigidBody.velocity = new Vector2(0, jumpForce);
+
+        if (jumpCount > 0)
+        {
+            playerRigidBody.velocity = new Vector2(0, jumpForce);
+
+            jumpCount = jumpCount - 1;
+        }
+
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        jumpCount = 2;
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
